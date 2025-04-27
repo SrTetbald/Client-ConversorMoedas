@@ -1,0 +1,19 @@
+<div class="converter-moeda">
+    <h2>Conversor de Moeda</h2>
+    <form (ngSubmit)="converter()">
+        <label for="valor">Valor:</label>
+        <input id="valor" type="number" [(ngModel)]="valor" name="valor" required />
+
+        <label for="de">De:</label>
+        <input id="de" type="text" [(ngModel)]="de" name="de" required />
+
+        <label for="para">Para:</label>
+        <input id="para" type="text" [(ngModel)]="para" name="para" required />
+
+        <button type="submit">Converter</button>
+    </form>
+
+    <div *ngIf="resultado !== null">
+        <h3>Resultado: {{ resultado }}</h3>
+    </div>
+</div>
