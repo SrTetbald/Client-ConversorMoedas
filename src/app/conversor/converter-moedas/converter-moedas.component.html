@@ -1,19 +1,59 @@
-<div class="converter-moeda">
-    <h2>Conversor de Moeda</h2>
-    <form (ngSubmit)="converter()">
-        <label for="valor">Valor:</label>
-        <input id="valor" type="number" [(ngModel)]="valor" name="valor" required />
+<div
+    class="bg-[#84B1D9] max-w-md mx-auto p-8 rounded-[40px] shadow-lg flex flex-col items-center gap-6"
+>
+    <h2 class="text-3xl font-bold text-[#071A26] text-center">Conversor de moedas</h2>
 
-        <label for="de">De:</label>
-        <input id="de" type="text" [(ngModel)]="de" name="de" required />
+    <form (ngSubmit)="converter()" class="flex flex-col items-center gap-4 w-full">
+        <!-- Campo de valor -->
+        <input
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            [(ngModel)]="valor"
+            name="valor"
+            placeholder="Valor"
+            required
+            class="bg-[#163359] text-white text-center rounded-full py-3 px-6 w-full focus:outline-none"
+        />
 
-        <label for="para">Para:</label>
-        <input id="para" type="text" [(ngModel)]="para" name="para" required />
+        <!-- Campo de e para -->
+        <div class="flex justify-between gap-4 w-full">
+            <select
+                name="de"
+                [(ngModel)]="de"
+                id="de"
+                required
+                class="bg-[#163359] text-white rounded-full py-3 px-6 w-1/2"
+            >
+                <option value="" disabled selected>De</option>
+                <option *ngFor="let moeda of moedas" [value]="moeda">
+                    {{ moeda }}
+                </option>
+            </select>
 
-        <button type="submit">Converter</button>
+            <select name="para" [(ngModel)]="para" id="para" required class="bg-[#163359] text-white rounded-full py-3 px-6 w-1/2">
+                <option value="" disabled selected>Para</option>
+                <option *ngFor="let moeda of moedas" [value]="moeda">
+                    {{ moeda }}
+                </option>
+            </select>
+        </div>
+
+        <!-- Resultado -->
+        <div
+            *ngIf="resultado !== null"
+            class="bg-[#163359] text-white rounded-xl py-2 px-4 text-lg"
+        >
+            {{ resultado }}
+        </div>
+
+        <!-- Botão -->
+        <button
+            type="submit"
+            class="bg-[#071A26] text-white rounded-full py-3 px-6 font-semibold hover:bg-[#0b2536] transition"
+        >
+            Converter
+        </button>
     </form>
-
-    <div *ngIf="resultado !== null">
-        <h3>Resultado: {{ resultado }}</h3>
-    </div>
 </div>
+

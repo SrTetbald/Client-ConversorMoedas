@@ -14,4 +14,8 @@ export class ApiService {
 
         return this.http.get<number>(this.apiUrl, { params });
     }
-}
+
+    getMoedas(): Observable<{Moeda: string}[]> {
+        return this.http.get<{Moeda: string}[]>('http://localhost:3000/cotacao/moedas');
+    }
+}  
