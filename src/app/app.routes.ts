@@ -1,4 +1,10 @@
 import { Routes } from '@angular/router';
-import { ConverterMoedasComponent } from './conversor/converter-moedas/converter-moedas.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AboutComponent } from './pages/about/about.component';
+import { ContactComponent } from './pages/contact/contact.component';
 
-export const routes: Routes = [{ path: '', component: ConverterMoedasComponent }];
+export const routes: Routes = [
+    { path: 'home', component: HomeComponent },
+    { path: 'about', component: AboutComponent },
+    { path: 'contact', component: ContactComponent },
+];

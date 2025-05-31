@@ -1,0 +1,87 @@
+<div
+    class="hover:shadow-amber-500/50 shadow-lg md:max-w-3xl md:mx-auto md:mt-10 md:p-4 md:rounded-lg"
+>
+    <div class="max-w-3xl mx-auto p-4 flex flex-col items-start justify-center">
+        <h1 class="text-3xl text-center font-bebas mt-5 mb-2">
+            Converta {{ de }} para {{ para }} usando a cotação média do Banco
+            Central.
+        </h1>
+        <p class="text-start text-gray-600 mb-5">
+            Utilize o conversor de moedas para obter a cotação média do Banco
+            Central. <br />
+            A cotação é atualizada diariamente e pode variar de acordo com o
+            mercado.
+        </p>
+    </div>
+    <div
+        class="mt-5 bg-amber-600 max-w-3xl h-74 mx-auto p-4 rounded-lg shadow-lg relative md:h-44"
+    >
+        <h1 class="text-lime-50 text-xl font-bebas mb-4 text-center">
+            Conversor de Moedas - Cotação Média do Banco Central
+        </h1>
+        <form
+            (ngSubmit)="converter()"
+            class="flex flex-col items-center justify-center gap-4 md:flex md:flex-row md:items-center md:justify-center md:gap-7"
+        >
+            <div
+                id="origem-valor"
+                class="flex items-center gap-2 bg-lime-50 shadow-lg rounded-lg"
+            >
+                <input
+                    type="text"
+                    [(ngModel)]="valor"
+                    name="valorOrigem"
+                    placeholder="0"
+                    inputmode="decimal"
+                    required
+                    (input)="onInputChange($event)"
+                    class="p-2 w-32 focus:outline-none"
+                />
+                <select
+                    [(ngModel)]="de"
+                    name="moedaOrigem"
+                    (change)="converter()"
+                >
+                    <option *ngFor="let moeda of moedas" [value]="moeda">
+                        {{ moeda }}
+                    </option>
+                </select>
+            </div>
+            <button type="button" (click)="trocarMoedas()" class="troca-btn">
+                ⇄
+            </button>
+            <div
+                id="destno-valor"
+                class="flex items-center gap-2 bg-lime-50 shadow-lg rounded-lg"
+            >
+                <input
+                    type="text"
+                    [(ngModel)]="resultado"
+                    name="valorDestino"
+                    placeholder="0"
+                    inputmode="decimal"
+                    required
+                    (input)="onInputChangeInverso($event)"
+                    class="p-2 w-32 focus:outline-none"
+                />
+                <select
+                    [(ngModel)]="para"
+                    name="moedaDestino"
+                    (change)="converter()"
+                >
+                    <option *ngFor="let moeda of moedas" [value]="moeda">
+                        {{ moeda }}
+                    </option>
+                </select>
+            </div>
+        </form>
+
+        <div
+            class="font-semibold text-lime-50 text-xl absolute bottom-2 left-2"
+        >
+            {{ de }}:{{ valor }} confere aproximadamente {{ para }}:{{
+                resultado
+            }}
+        </div>
+    </div>
+</div>

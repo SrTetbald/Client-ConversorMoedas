@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConverterMoedasComponent } from './converter-moedas.component';
+import { ContactComponent } from './contact.component';
 
-describe('ConverterMoedasComponent', () => {
-    let component: ConverterMoedasComponent;
-    let fixture: ComponentFixture<ConverterMoedasComponent>;
+describe('ContactComponent', () => {
+    let component: ContactComponent;
+    let fixture: ComponentFixture<ContactComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ConverterMoedasComponent],
+            imports: [ContactComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(ConverterMoedasComponent);
+        fixture = TestBed.createComponent(ContactComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
