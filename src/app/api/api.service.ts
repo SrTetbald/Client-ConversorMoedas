@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface IMoeda {
+    Moeda: string;
+    Nome: string;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -22,8 +27,8 @@ export class ApiService {
         return this.http.get<number>(this.apiUrl, { params });
     }
 
-    getMoedas(): Observable<{ Moeda: string }[]> {
-        return this.http.get<{ Moeda: string }[]>(
+    getMoedas(): Observable<IMoeda[]> {
+        return this.http.get<IMoeda[]>(
             'http://localhost:3000/cotacao/moedas',
         );
     }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../api/api.service';
+import { ApiService, IMoeda } from '../../api/api.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -17,7 +17,7 @@ export class ConversorComponent {
     de: string = 'BRL';
     para: string = 'USD';
     resultado: number | null = null;
-    moedas: any[] = [];
+    moedas: IMoeda[] = [];
 
     constructor(private readonly apiService: ApiService) {}
 
@@ -25,7 +25,7 @@ export class ConversorComponent {
         this.apiService.getMoedas().subscribe({
             next: res => {
                 if (Array.isArray(res)) {
-                    this.moedas = res.map(item => item.Moeda);
+                    this.moedas = res; // Extrai apenas os códigos de moeda
                     console.log('Moedas carregadas:', this.moedas);
 
                     this.converter();
@@ -60,9 +60,7 @@ export class ConversorComponent {
                 },
                 error: err => {
                     console.error('Erro ao converter moeda:', err);
-                    alert(
-                        'Erro ao converter moeda. Verifique os dados e tente novamente.',
-                    );
+                    alert('Erro ao converter moeda. Verifique os dados e tente novamente.');
                     this.resultado = null;
                 },
             });
@@ -73,7 +71,7 @@ export class ConversorComponent {
             this.resultado = 0;
             return;
         }
-
+        
         this.apiService
             .converterMoeda(this.para, this.de, this.resultado.toString())
             .subscribe({
@@ -82,9 +80,7 @@ export class ConversorComponent {
                 },
                 error: err => {
                     console.error('Erro ao converter moeda:', err);
-                    alert(
-                        'Erro ao converter moeda. Verifique os dados e tente novamente.',
-                    );
+                    alert('Erro ao converter moeda. Verifique os dados e tente novamente.');
                     this.valor = '0';
                 },
             });
@@ -102,11 +98,14 @@ export class ConversorComponent {
             this.converterDireta();
         }
     }
+
+    // pedi para IA ###############################################################################
     formatValue(value: string): string {
         if (value.includes('.')) {
             const [intPart, decPart] = value.split('.');
             return `${parseInt(intPart || '0')}.${decPart}`;
         }
+        // Remove zeros à esquerda de números inteiros
         return value ? `${parseInt(value)}` : '0';
     }
 
@@ -114,13 +113,16 @@ export class ConversorComponent {
         const input = event.target as HTMLInputElement;
         let value = input.value;
 
+        // Remove caracteres não numéricos, exceto ponto
         value = value.replace(/[^\d.]/g, '');
 
+        // Garante que há apenas um ponto decimal
         const parts = value.split('.');
         if (parts.length > 2) {
             value = `${parts[0]}.${parts.slice(1).join('')}`;
         }
 
+        // Formata o valor
         this.valor = this.formatValue(value);
         this.converter();
     }
@@ -129,13 +131,16 @@ export class ConversorComponent {
         const input = event.target as HTMLInputElement;
         let value = input.value;
 
+        // Remove caracteres não numéricos, exceto ponto
         value = value.replace(/[^\d.]/g, '');
 
+        // Garante que há apenas um ponto decimal
         const parts = value.split('.');
         if (parts.length > 2) {
             value = `${parts[0]}.${parts.slice(1).join('')}`;
         }
 
+        // Formata o valor e converte para número
         this.resultado = Number(this.formatValue(value));
         this.converterInversa();
     }

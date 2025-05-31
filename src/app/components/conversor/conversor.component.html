@@ -42,8 +42,8 @@
                     name="moedaOrigem"
                     (change)="converter()"
                 >
-                    <option *ngFor="let moeda of moedas" [value]="moeda">
-                        {{ moeda }}
+                    <option *ngFor="let moeda of moedas" [value]="moeda.Moeda">
+                        {{ moeda.Moeda }}
                     </option>
                 </select>
             </div>
@@ -69,8 +69,8 @@
                     name="moedaDestino"
                     (change)="converter()"
                 >
-                    <option *ngFor="let moeda of moedas" [value]="moeda">
-                        {{ moeda }}
+                    <option *ngFor="let moeda of moedas" [value]="moeda.Moeda">
+                        {{ moeda.Moeda }}
                     </option>
                 </select>
             </div>
