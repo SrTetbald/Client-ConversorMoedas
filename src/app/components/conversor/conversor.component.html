@@ -3,7 +3,7 @@
 >
     <div class="max-w-3xl mx-auto p-4 flex flex-col items-start justify-center">
         <h1 class="text-3xl text-center font-bebas mt-5 mb-2">
-            Converta {{ de }} para {{ para }} usando a cotação média do Banco
+            Converta {{ deNome }} para {{ paraNome }} usando a cotação média do Banco
             Central.
         </h1>
         <p class="text-start text-gray-600 mb-5">
@@ -25,7 +25,7 @@
         >
             <div
                 id="origem-valor"
-                class="flex items-center gap-2 bg-lime-50 shadow-lg rounded-lg"
+                class="flex items-center gap-2 bg-lime-50 shadow-lg rounded-lg w-50 relative"
             >
                 <input
                     type="text"
@@ -37,22 +37,77 @@
                     (input)="onInputChange($event)"
                     class="p-2 w-32 focus:outline-none"
                 />
-                <select
-                    [(ngModel)]="de"
-                    name="moedaOrigem"
-                    (change)="converter()"
-                >
-                    <option *ngFor="let moeda of moedas" [value]="moeda.Moeda">
-                        {{ moeda.Moeda }}
-                    </option>
-                </select>
+                <div class="absolute right-2">
+                    <button
+                        type="button"
+                        (click)="toggleDropdownOrigem()"
+                        class="flex items-center gap-2 hover:bg-lime-100 rounded-lg px-3 py-1.5 transition-colors"
+                    >
+                        <span class="font-medium">
+                            {{ de }}
+                        </span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 transition-transform"
+                            [class.rotate-180]="dropdownOrigemOpen"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+                    </button>
+                    <div
+                        *ngIf="dropdownOrigemOpen"
+                        class="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-lg z-50 border border-gray-100 md:left-0"
+                    >
+                        <div class="p-2 border-b border-gray-100">
+                            <input
+                                type="text"
+                                [(ngModel)]="procurarOrigem"
+                                name="searchOrigem"
+                                placeholder="Buscar moeda..."
+                                class="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-200"
+                            />
+                        </div>
+                        <div class="max-h-64 overflow-y-auto">
+                            <div
+                                *ngFor="
+                                    let moeda of filtrarMoedas(procurarOrigem)
+                                "
+                                (click)="selecionarMoedaOrigem(moeda.Moeda)"
+                                class="flex flex-col px-4 py-2 hover:bg-lime-50 cursor-pointer"
+                            >
+                                <span class="font-medium">{{
+                                    moeda.Moeda
+                                }}</span>
+                                <span class="text-sm text-gray-600">{{
+                                    moeda.Nome
+                                }}</span>
+                            </div>
+                            <div
+                                *ngIf="
+                                    filtrarMoedas(procurarOrigem).length === 0
+                                "
+                                class="px-4 py-2 text-gray-500 text-sm"
+                            >
+                                Nenhuma moeda encontrada.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <button type="button" (click)="trocarMoedas()" class="troca-btn">
                 ⇄
             </button>
             <div
                 id="destno-valor"
-                class="flex items-center gap-2 bg-lime-50 shadow-lg rounded-lg"
+                class="flex items-center gap-2 bg-lime-50 shadow-lg rounded-lg w-50 relative"
             >
                 <input
                     type="text"
@@ -64,22 +119,80 @@
                     (input)="onInputChangeInverso($event)"
                     class="p-2 w-32 focus:outline-none"
                 />
-                <select
-                    [(ngModel)]="para"
-                    name="moedaDestino"
-                    (change)="converter()"
-                >
-                    <option *ngFor="let moeda of moedas" [value]="moeda.Moeda">
-                        {{ moeda.Moeda }}
-                    </option>
-                </select>
+                <div class="absolute right-2">
+                    <button
+                        type="button"
+                        (click)="toggleDropdownDestino()"
+                        class="flex items-center gap-2 hover:bg-lime-100 rounded-lg px-3 py-1.5 transition-colors"
+                    >
+                        <span class="font-medium">
+                            {{ para }}
+                        </span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 transition-transform"
+                            [class.rotate-180]="dropdownDestinoOpen"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+                    </button>
+                    <div *ngIf="dropdownDestinoOpen"
+                        class="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-lg z-50 border border-gray-100 md:left-0">
+                        <div class="p-2 border-b border-gray-100">
+                            <input
+                                type="text"
+                                [(ngModel)]="procurarDestino"
+                                name="searchDestino"
+                                placeholder="Buscar moeda..."
+                                class="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-200"
+                            />
+
+                        </div>
+                        <div class="max-h-64 overflow-y-auto">
+                            <div
+                                *ngFor="
+                                    let moeda of filtrarMoedas(
+                                        procurarDestino
+                                    )
+                                "
+                                (click)="selecionarMoedaDestino(moeda.Moeda)"
+                                class="flex flex-col px-4 py-2 hover:bg-lime-50 cursor-pointer"
+                            >
+                                <span class="font-medium">{{
+                                    moeda.Moeda
+                                }}</span>
+                                <span class="text-sm text-gray-600">{{
+                                    moeda.Nome
+                                }}</span>
+                            </div>
+                            <div
+                                *ngIf="
+                                    filtrarMoedas(procurarDestino)
+                                        .length === 0
+                                "
+                                class="px-4 py-2 text-gray-500 text-sm"
+                            >
+                                Nenhuma moeda encontrada.
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
 
         <div
             class="font-semibold text-lime-50 text-xl absolute bottom-2 left-2"
         >
-            {{ de }}:{{ valor }} confere aproximadamente {{ para }}:{{
+            {{ de }} {{ valor }} confere aproximadamente {{ para }} {{
                 resultado
             }}
         </div>

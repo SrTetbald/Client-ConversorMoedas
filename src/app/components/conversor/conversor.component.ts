@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService, IMoeda } from '../../api/api.service';
@@ -15,9 +15,17 @@ import { HttpClientModule } from '@angular/common/http';
 export class ConversorComponent {
     valor: string = '1';
     de: string = 'BRL';
+    deNome: string = 'Real Brasileiro'; 
     para: string = 'USD';
+    paraNome: string = 'Dólar Dos Estados Unidos';
     resultado: number | null = null;
     moedas: IMoeda[] = [];
+    dropdownOrigemOpen: boolean = false;
+    dropdownDestinoOpen: boolean = false;
+    procurarOrigem: string = '';
+    procurarDestino: string = '';
+    ///////////////////////////////////////////
+
 
     constructor(private readonly apiService: ApiService) {}
 
@@ -99,7 +107,51 @@ export class ConversorComponent {
         }
     }
 
-    // pedi para IA ###############################################################################
+    filtrarMoedas(procura: string): IMoeda[] {
+        if (!procura) return this.moedas;
+        procura = procura.toLowerCase();
+        return this.moedas.filter(moeda => 
+            moeda.Moeda.toLowerCase().includes(procura) ||
+            moeda.Nome.toLowerCase().includes(procura)
+        );
+    }
+    toggleDropdownOrigem(){
+        this.dropdownOrigemOpen = !this.dropdownOrigemOpen;
+        this.dropdownDestinoOpen = false;
+    }
+
+    toggleDropdownDestino(){
+        this.dropdownDestinoOpen = !this.dropdownDestinoOpen;
+        this.dropdownOrigemOpen = false;
+    }
+
+    selecionarMoedaOrigem(moedaCodigo: string) {
+        this.de = moedaCodigo;
+        this.deNome = this.moedas.find(m => m.Moeda === moedaCodigo)?.Nome || 'Moeda Desconhecida';
+        this.dropdownOrigemOpen = false;
+        this.converter();
+    }
+
+    selecionarMoedaDestino(moedaCodigo: string) {
+        this.para = moedaCodigo;
+        this.paraNome = this.moedas.find(m => m.Moeda === moedaCodigo)?.Nome || 'Moeda Desconhecida';
+        this.dropdownDestinoOpen = false;
+        this.converter();
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const targetElement = event.target as HTMLElement;
+        
+        // Fecha dropdown se clicar fora
+        if (!targetElement.closest('#origem-valor')) {
+            this.dropdownOrigemOpen = false;
+        }
+        if (!targetElement.closest('#destno-valor')) {
+            this.dropdownDestinoOpen = false;
+        }
+    }
+
     formatValue(value: string): string {
         if (value.includes('.')) {
             const [intPart, decPart] = value.split('.');
