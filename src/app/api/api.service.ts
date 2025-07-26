@@ -11,7 +11,7 @@ export interface IMoeda {
     providedIn: 'root',
 })
 export class ApiService {
-    private apiUrl = 'http://localhost:3000/cotacao/converter';
+    private apiUrl = 'https://conversordemoedas-h7cg.onrender.com/cotacao/converter';
     constructor(private http: HttpClient) {}
 
     converterMoeda(
@@ -29,7 +29,7 @@ export class ApiService {
 
     getMoedas(): Observable<IMoeda[]> {
         return this.http.get<IMoeda[]>(
-            'http://localhost:3000/cotacao/moedas',
+            'https://conversordemoedas-h7cg.onrender.com/cotacao/moedas',
         );
     }
 }
