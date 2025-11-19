@@ -11,7 +11,7 @@ export interface IMoeda {
     providedIn: 'root',
 })
 export class ApiService {
-    private apiUrl = 'https://conversor.srtetbald.app/cotacao/converter'; //render: 'https://conversordemoedas-h7cg.onrender.com/cotacao/converter';
+    private apiUrl = 'https://conversordemoedas-h7cg.onrender.com/cotacao/converter';
     constructor(private http: HttpClient) {}
 
     converterMoeda(
