@@ -23,7 +23,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # O Angular frequentemente usa uma subpasta dentro de /app/dist.
 # VERIFIQUE a sua pasta dist e substitua o caminho abaixo se for diferente!
 # Exemplo: /app/dist/NOME_DO_SEU_PROJETO
-COPY --from=builder /app/dist/client-conversor /usr/share/nginx/html
+COPY --from=builder /app/dist/client-conversor/browser /usr/share/nginx/html
 
 EXPOSE 80
 
